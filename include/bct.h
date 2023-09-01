@@ -23,10 +23,10 @@
 #define bct_UWORD_MIN 0
 #define bct_UWORD_MAX 531441
 
-#define triad6_bct_getTrit(t, trit) ((((t) >> ((trit) * bct_TRIT_SIZE)) & ((1 << bct_TRIT_SIZE) - 1)) - 2)
-#define triad6_bct_setTrit(t, trit, val) ((t) |= ((((val) + 2) & ((1 << bct_TRIT_SIZE) - 1)) << ((trit) * bct_TRIT_SIZE)))
+#define triad6_bct_getTrit(t, trit) ((((t) >> ((trit) * bct_TRIT_SIZE)) & ((1 << bct_TRIT_SIZE) - 1)) - 1)
+#define triad6_bct_setTrit(t, trit, val) (t) = ((t) & ~(((1 << bct_TRIT_SIZE) - 1) << ((trit) * bct_TRIT_SIZE))) | ((((val) + 1) & ((1 << bct_TRIT_SIZE) - 1)) << ((trit) * bct_TRIT_SIZE))
 #define triad6_bct_getUTrit(t, trit) (((t) >> ((trit) * bct_TRIT_SIZE)) & ((1 << bct_TRIT_SIZE) - 1))
-#define triad6_bct_setUTrit(t, trit, val) ((t) |= (((val) & ((1 << bct_TRIT_SIZE) - 1)) << ((trit) * bct_TRIT_SIZE)))
+#define triad6_bct_setUTrit(t, trit, val) (t) = ((t) & ~(((1 << bct_TRIT_SIZE) - 1) << ((trit) * bct_TRIT_SIZE))) | (((val) & ((1 << bct_TRIT_SIZE) - 1)) << ((trit) * bct_TRIT_SIZE))
 
 #define triad6_bct_rollTryte(t) ((t) & ((1 << (bct_TRIT_SIZE * bct_TRYTE_SIZE)) - 1))
 #define triad6_bct_rollWord(t) ((t) & ((1 << (bct_TRIT_SIZE * bct_WORD_SIZE)) - 1))
@@ -35,7 +35,7 @@
 #define triad6_bct_tryte2uword(t) (triad6_bct_uword_convert((uint32_t)triad6_bct_tryte_value(t)))
 #define triad6_bct_utryte2tryte(t) (triad6_bct_tryte_convert(triad6_bct_utryte_value(t)))
 #define triad6_bct_utryte2uword(t) ((bct_uword)(t))
-#define triad6_bct_uword2tryte(t) (triad6_bct_tryte_convert((uint16_t)triad6_bct_uword_value(triad6_bct_rollTryte(t))))
+#define triad6_bct_uword2tryte(t) (triad6_bct_tryte_convert((int16_t)triad6_bct_uword_value(triad6_bct_rollTryte(t))))
 #define triad6_bct_uword2utryte(t) (triad6_bct_rollTryte(t))
 
 typedef int16_t bct_tryte;
@@ -66,6 +66,7 @@ int16_t triad6_bct_tryte_value(bct_tryte t);
 void triad6_bct_tryte_septemvigdump(bct_tryte t, char *out);
 
 bct_tryte triad6_bct_tryte_add(bct_tryte t1, bct_tryte t2);
+bct_tryte triad6_bct_tryte_sub(bct_tryte t1, bct_tryte t2);
 bct_tryte triad6_bct_tryte_shift_left(bct_tryte t, int shiftAmount);
 bct_tryte triad6_bct_tryte_shift_right(bct_tryte t, int shiftAmount);
 
@@ -102,6 +103,7 @@ uint16_t triad6_bct_utryte_value(bct_utryte t);
 void triad6_bct_utryte_septemvigdump(bct_utryte t, char *out);
 
 bct_utryte triad6_bct_utryte_add(bct_utryte t1, bct_utryte t2);
+bct_utryte triad6_bct_utryte_sub(bct_utryte t1, bct_utryte t2);
 bct_utryte triad6_bct_utryte_shift_left(bct_utryte t, int shiftAmount);
 bct_utryte triad6_bct_utryte_shift_right(bct_utryte t, int shiftAmount);
 

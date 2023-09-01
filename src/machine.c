@@ -2,7 +2,7 @@
 #include "utility.h"
 
 /*
-	0200: P3 DD	SETBU #-1
+	0200: P3 DC	SETBU #-1
 	0202: 40 03	ADD #3
 	0204: E0 02	CMP #2
 	0206: D1 D9	RBPOS 0202
@@ -18,7 +18,7 @@ void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb wr
 	
 	#define ROM(off, val) writeCb(triad6_bct_uword_add(obj->cpu.instPtr, triad6_bct_uword_convert(off)), triad6_bct_utryte_septemvigits(val))
 	ROM(0, "P3");
-	ROM(1, "DD");
+	ROM(1, "DC");
 	ROM(2, "40");
 	ROM(3, "03");
 	ROM(4, "E0");
@@ -27,10 +27,11 @@ void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb wr
 	ROM(7, "D9");
 	#undef ROM
 	
+	/*
 	char *dump = triad6_util_septemvigdump(obj->RAM, obj->ramSize);
 	printf("%s", dump);
-	//fflush(stdout);
 	free(dump);
+	*/
 	
 	obj->cpu.clockPeriod = PERF_COUNTER_UNITS / machine_CPU_FREQUENCY;
 	obj->cpu.readTryte = readCb;

@@ -7,7 +7,7 @@ bct_tryte triad6_bct_tryte_convert(int16_t value) {
 	
 	if (value >= 0) {
 		for (size_t tritOffset = 0; tritOffset < bct_TRYTE_SIZE; tritOffset++) {
-			triad6_bct_setUTrit(ret, tritOffset, (value + 1) % 3);
+			triad6_bct_setTrit(ret, tritOffset, (value + 1) % 3);
 			value = (value + 1) / 3;
 		}
 	}
@@ -129,6 +129,11 @@ bct_tryte triad6_bct_tryte_add(bct_tryte t1, bct_tryte t2) {
 	}
 	
 	return ret;
+}
+
+bct_tryte triad6_bct_tryte_sub(bct_tryte t1, bct_tryte t2) {
+	bct_utryte t2Comp = triad6_bct_tryte_inv(t2);
+	return triad6_bct_tryte_add(t1, t2Comp);
 }
 
 bct_tryte triad6_bct_tryte_shift_left(bct_tryte t, int shiftAmount) {
@@ -310,6 +315,11 @@ bct_utryte triad6_bct_utryte_add(bct_utryte t1, bct_utryte t2) {
 	}
 	
 	return ret;
+}
+
+bct_utryte triad6_bct_utryte_sub(bct_utryte t1, bct_utryte t2) {
+	bct_utryte t2Comp = triad6_bct_utryte_add(triad6_bct_utryte_inv(t2), triad6_bct_utryte_convert(1));
+	return triad6_bct_utryte_add(t1, t2Comp);
 }
 
 bct_utryte triad6_bct_utryte_shift_left(bct_utryte t, int shiftAmount) {

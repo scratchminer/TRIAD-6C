@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
@@ -10,6 +11,11 @@ static SDL_Window *window;
 static machine_state machine;
 
 static bct_utryte readCb(bct_uword addr) {
+	/*char buf[5];
+	triad6_bct_uword_septemvigdump(addr, buf);
+	buf[4] = '\0';
+	printf("read %s\n", buf);
+	*/
 	uint32_t offset = triad6_bct_uword_value(addr);
 	
 	if (offset < machine.ramSize) {
@@ -33,6 +39,13 @@ static bct_utryte readCb(bct_uword addr) {
 }
 
 static void writeCb(bct_uword addr, bct_utryte data) {
+	/*char addrBuf[5], dataBuf[3];
+	triad6_bct_uword_septemvigdump(addr, addrBuf);
+	triad6_bct_utryte_septemvigdump(data, dataBuf);
+	addrBuf[4] = '\0';
+	dataBuf[2] = '\0';
+	printf("write %s -> %s\n", dataBuf, addrBuf);
+	*/
 	uint32_t offset = triad6_bct_uword_value(addr);
 	
 	if (offset < machine.ramSize) {

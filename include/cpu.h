@@ -36,7 +36,10 @@ typedef struct {
 	bct_tryte ir;
 	bct_uword instPtr;
 	
+	uint8_t thisCycle;
 	bool fetch;
+	
+	bct_uword tmp;
 	
 	cpu_read_cb readTryte;
 	cpu_write_cb writeTryte;
