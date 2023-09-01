@@ -36,8 +36,8 @@ bct_tryte triad6_bct_tryte_septemvigits(char *septemvigits) {
 	bct_tryte ret = triad6_bct_tryte_convert(0);
 	int16_t value;
 	
-	for (size_t offset = 1; (offset <= size) && (offset <= bct_TRYTE_SIZE / 3); offset++) {
-		char septemvigit = septemvigits[size - offset];
+	for (size_t offset = 0; (offset < size) && (offset < bct_TRYTE_SIZE / 3); offset++) {
+		char septemvigit = septemvigits[offset];
 		
 		switch (septemvigit) {
 			case '0':
@@ -89,6 +89,21 @@ int16_t triad6_bct_tryte_value(bct_tryte t) {
 	}
 	
 	return ret;
+}
+
+void triad6_bct_tryte_septemvigdump(bct_tryte t, char *out) {
+	for (size_t offset = 1; offset <= (bct_TRYTE_SIZE / 3); offset++) {
+		char value = (char)(triad6_bct_tryte_value(triad6_bct_tryte_and(t, triad6_bct_tryte_septemvigits("Q"))));
+		
+		if (value < 10) {
+			out[(bct_TRYTE_SIZE / 3) - offset] = '0' + value;
+		}
+		else {
+			out[(bct_TRYTE_SIZE / 3) - offset] = 'A' + (value - 10);
+		}
+		
+		t = triad6_bct_tryte_shift_right(t, 3);
+	}
 }
 
 bct_tryte triad6_bct_tryte_add(bct_tryte t1, bct_tryte t2) {
@@ -206,8 +221,8 @@ bct_utryte triad6_bct_utryte_septemvigits(char *septemvigits) {
 	bct_utryte ret = triad6_bct_utryte_convert(0);
 	uint16_t value;
 	
-	for (size_t offset = 1; (offset <= size) && (offset <= bct_TRYTE_SIZE / 3); offset++) {
-		char septemvigit = septemvigits[size - offset];
+	for (size_t offset = 0; (offset < size) && (offset < bct_TRYTE_SIZE / 3); offset++) {
+		char septemvigit = septemvigits[offset];
 		
 		switch (septemvigit) {
 			case '0':
@@ -259,6 +274,21 @@ uint16_t triad6_bct_utryte_value(bct_utryte t) {
 	}
 	
 	return ret;
+}
+
+void triad6_bct_utryte_septemvigdump(bct_utryte t, char *out) {
+	for (size_t offset = 1; offset <= (bct_TRYTE_SIZE / 3); offset++) {
+		char value = (char)(triad6_bct_utryte_value(triad6_bct_utryte_and(t, triad6_bct_utryte_septemvigits("Q"))));
+		
+		if (value < 10) {
+			out[(bct_TRYTE_SIZE / 3) - offset] = '0' + value;
+		}
+		else {
+			out[(bct_TRYTE_SIZE / 3) - offset] = 'A' + (value - 10);
+		}
+		
+		t = triad6_bct_utryte_shift_right(t, 3);
+	}
 }
 
 bct_utryte triad6_bct_utryte_add(bct_utryte t1, bct_utryte t2) {
@@ -369,8 +399,8 @@ bct_uword triad6_bct_uword_septemvigits(char *septemvigits) {
 	bct_utryte ret = triad6_bct_utryte_convert(0);
 	uint32_t value;
 	
-	for (size_t offset = 1; (offset <= size) && (offset <= bct_WORD_SIZE / 3); offset++) {
-		char septemvigit = septemvigits[size - offset];
+	for (size_t offset = 0; (offset < size) && (offset < bct_WORD_SIZE / 3); offset++) {
+		char septemvigit = septemvigits[offset];
 		
 		switch (septemvigit) {
 			case '0':
@@ -422,6 +452,21 @@ uint32_t triad6_bct_uword_value(bct_uword t) {
 	}
 	
 	return ret;
+}
+
+void triad6_bct_uword_septemvigdump(bct_uword t, char *out) {
+	for (size_t offset = 1; offset <= (bct_WORD_SIZE / 3); offset++) {
+		char value = (char)(triad6_bct_uword_value(triad6_bct_uword_and(t, triad6_bct_uword_septemvigits("Q"))));
+		
+		if (value < 10) {
+			out[(bct_WORD_SIZE / 3) - offset] = '0' + value;
+		}
+		else {
+			out[(bct_WORD_SIZE / 3) - offset] = 'A' + (value - 10);
+		}
+		
+		t = triad6_bct_uword_shift_right(t, 3);
+	}
 }
 
 bct_uword triad6_bct_uword_sub(bct_uword t1, bct_uword t2) {
@@ -524,7 +569,7 @@ bct_uword triad6_bct_uword_mul(bct_uword t1, bct_uword t2) {
 bct_utryte triad6_bct_memory_read(const uint8_t *src, size_t offset) {
 	bct_utryte ret;
 	
-	size_t bitOffset = offset * bct_TRIT_SIZE * bct_TRYTE_SIZE;
+	size_t bitOffset = (offset * 8) * bct_TRIT_SIZE * bct_TRYTE_SIZE;
 	size_t byteOffset = bitOffset / 8;
 	bitOffset = bitOffset % 8;
 	
@@ -540,7 +585,7 @@ bct_utryte triad6_bct_memory_read(const uint8_t *src, size_t offset) {
 }
 
 void triad6_bct_memory_write(const uint8_t *dst, size_t offset, bct_tryte data) {
-	size_t bitOffset = offset * bct_TRIT_SIZE * bct_TRYTE_SIZE;
+	size_t bitOffset = (offset * 8) * bct_TRIT_SIZE * bct_TRYTE_SIZE;
 	size_t byteOffset = bitOffset / 8;
 	bitOffset = bitOffset % 8;
 	

@@ -739,7 +739,7 @@ void triad6_cpu_init(cpu_state *obj) {
 static bool stopCPU = true;
 
 static void cpu_loop(cpu_state *obj) {
-	while ((util_perfCounter() - obj->startClockTime) < (PERF_COUNTER_UNITS / FRAMERATE)) {
+	while ((triad6_util_perfCounter() - obj->startClockTime) < (PERF_COUNTER_UNITS / FRAMERATE)) {
 		if(obj->fetch) {
 			obj->PC = obj->instPtr;
 			cpu_EXEC_INST(rdpc);
@@ -747,8 +747,8 @@ static void cpu_loop(cpu_state *obj) {
 			obj->fetch = false;
 		}
 		else if (!setjmp(renderEnv)) {
-			obj->lastClockTime = util_perfCounter();
-			while ((util_perfCounter() - obj->lastClockTime) < obj->clockPeriod) {
+			obj->lastClockTime = triad6_util_perfCounter();
+			while ((triad6_util_perfCounter() - obj->lastClockTime) < obj->clockPeriod) {
 				cpu_opcodes[triad6_bct_utryte_value(obj->ir)](obj);
 				obj->fetch = true;
 			}
@@ -757,8 +757,8 @@ static void cpu_loop(cpu_state *obj) {
 }
 
 void triad6_cpu_execute(cpu_state *obj) {
-	obj->lastClockTime = util_perfCounter();
-	obj->startClockTime = util_perfCounter();
+	obj->lastClockTime = triad6_util_perfCounter();
+	obj->startClockTime = triad6_util_perfCounter();
 	
 	if (stopCPU) {
 		if (!setjmp(renderEnv)) {
@@ -774,8 +774,8 @@ void triad6_cpu_execute(cpu_state *obj) {
 }
 
 void triad6_cpu_quit(cpu_state *obj) {
-	obj->lastClockTime = util_perfCounter();
-	obj->startClockTime = util_perfCounter();
+	obj->lastClockTime = triad6_util_perfCounter();
+	obj->startClockTime = triad6_util_perfCounter();
 	
 	if (!setjmp(renderEnv)) {
 		stopCPU = true;

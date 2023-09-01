@@ -61,7 +61,9 @@ bct_tryte triad6_bct_tryte_tritfield(int16_t *trits, size_t size);
 bct_tryte triad6_bct_tryte_septemvigits(char *septemvigits);
 
 bct_tryte triad6_bct_tryte_convert(int16_t value);
+
 int16_t triad6_bct_tryte_value(bct_tryte t);
+void triad6_bct_tryte_septemvigdump(bct_tryte t, char *out);
 
 bct_tryte triad6_bct_tryte_add(bct_tryte t1, bct_tryte t2);
 bct_tryte triad6_bct_tryte_shift_left(bct_tryte t, int shiftAmount);
@@ -97,6 +99,7 @@ bct_tryte triad6_bct_tryte_mul(bct_tryte t1, bct_tryte t2);
 bct_utryte triad6_bct_utryte_convert(uint16_t value);
 bct_utryte triad6_bct_utryte_septemvigits(char *septemvigits);
 uint16_t triad6_bct_utryte_value(bct_utryte t);
+void triad6_bct_utryte_septemvigdump(bct_utryte t, char *out);
 
 bct_utryte triad6_bct_utryte_add(bct_utryte t1, bct_utryte t2);
 bct_utryte triad6_bct_utryte_shift_left(bct_utryte t, int shiftAmount);
@@ -132,6 +135,7 @@ bct_utryte triad6_bct_utryte_mul(bct_utryte t1, bct_utryte t2);
 bct_uword triad6_bct_uword_convert(uint32_t value);
 bct_uword triad6_bct_uword_septemvigits(char *septemvigits);
 uint32_t triad6_bct_uword_value(bct_uword t);
+void triad6_bct_uword_septemvigdump(bct_uword t, char *out);
 
 bct_uword triad6_bct_uword_add(bct_uword t1, bct_uword t2);
 bct_uword triad6_bct_uword_sub(bct_uword t1, bct_uword t2);
