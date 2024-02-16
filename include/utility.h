@@ -90,7 +90,7 @@ static char *triad6_util_septemvigdump(uint8_t *data, size_t size) {
 	// reserve space for the null terminator
 	size_t bufSize = 1;
 	
-	for (size_t addr = 0; triad6_util_trytes2Bytes(addr) < size; addr += 9) {
+	for (size_t addr = 0; addr < size; addr += 9) {
 		bufSize += strlen("0000: ");
 		for (size_t offset = 0; offset < 9; offset++) {
 			bufSize += strlen("00 ");
@@ -103,7 +103,7 @@ static char *triad6_util_septemvigdump(uint8_t *data, size_t size) {
 	int n;
 	char tryteEnd;
 	
-	for (size_t addr = 0; triad6_util_trytes2Bytes(addr) < size; addr += 9) {
+	for (size_t addr = 0; addr < size; addr += 9) {
 		strncpy(ptr, "0000: ", strlen("0000: "));
 		triad6_bct_uword_septemvigdump(triad6_bct_uword_convert(addr), ptr);
 		ptr += strlen("0000: ");

@@ -12,8 +12,8 @@ void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb wr
 	triad6_cpu_init(&obj->cpu);
 	triad6_bvs1_init(&obj->video);
 	
-	obj->ramSize = triad6_util_trytes2Bytes(triad6_util_kiloTrytes2Trytes(1));
-	obj->RAM = malloc(obj->ramSize);
+	obj->ramSize = triad6_util_kiloTrytes2Trytes(1);
+	obj->RAM = malloc(triad6_util_trytes2Bytes(obj->ramSize));
 	obj->cpu.instPtr = triad6_bct_uword_septemvigits("0200");
 	
 	#define ROM(off, val) writeCb(triad6_bct_uword_add(obj->cpu.instPtr, triad6_bct_uword_convert(off)), triad6_bct_utryte_septemvigits(val))

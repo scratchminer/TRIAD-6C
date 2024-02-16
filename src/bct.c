@@ -406,7 +406,7 @@ bct_uword triad6_bct_uword_convert(uint32_t value) {
 
 bct_uword triad6_bct_uword_septemvigits(char *septemvigits) {
 	size_t size = strlen(septemvigits);
-	bct_utryte ret = triad6_bct_utryte_convert(0);
+	bct_uword ret = triad6_bct_uword_convert(0);
 	uint32_t value;
 	
 	for (size_t offset = 0; (offset < size) && (offset < bct_WORD_SIZE / 3); offset++) {
@@ -579,7 +579,7 @@ bct_uword triad6_bct_uword_mul(bct_uword t1, bct_uword t2) {
 bct_utryte triad6_bct_memory_read(const uint8_t *src, size_t offset) {
 	bct_utryte ret;
 	
-	size_t bitOffset = (offset * 8) * bct_TRIT_SIZE * bct_TRYTE_SIZE;
+	size_t bitOffset = offset * bct_TRIT_SIZE * bct_TRYTE_SIZE;
 	size_t byteOffset = bitOffset / 8;
 	bitOffset = bitOffset % 8;
 	
@@ -595,13 +595,13 @@ bct_utryte triad6_bct_memory_read(const uint8_t *src, size_t offset) {
 }
 
 void triad6_bct_memory_write(const uint8_t *dst, size_t offset, bct_tryte data) {
-	size_t bitOffset = (offset * 8) * bct_TRIT_SIZE * bct_TRYTE_SIZE;
+	size_t bitOffset = offset * bct_TRIT_SIZE * bct_TRYTE_SIZE;
 	size_t byteOffset = bitOffset / 8;
 	bitOffset = bitOffset % 8;
 	
 	uint16_t *addr = (uint16_t *)&dst[byteOffset];
 	if (bitOffset) {
-		*addr |= triad6_bct_rollTryte(data) >> (16 - (bct_TRIT_SIZE * bct_TRYTE_SIZE));
+		*addr |= triad6_bct_rollTryte(data) << (16 - (bct_TRIT_SIZE * bct_TRYTE_SIZE));
 	}
 	else {
 		*addr |= triad6_bct_rollTryte(data);

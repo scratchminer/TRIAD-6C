@@ -10,6 +10,12 @@
 static SDL_Window *window;
 static machine_state machine;
 
+#define TRIAD6_FRAMEBUFFER_START (triad6_bct_uword_value(triad6_bct_uword_septemvigits("3000")))
+#define TRIAD6_FRAMEBUFFER_END (triad6_bct_uword_value(triad6_bct_uword_septemvigits("6000")))
+#define TRIAD6_COLOR_TABLE_START (triad6_bct_uword_value(triad6_bct_uword_septemvigits("B080")))
+#define TRIAD6_PALETTES_START (triad6_bct_uword_value(triad6_bct_uword_septemvigits("B090")))
+#define TRIAD6_PALETTES_END (triad6_bct_uword_value(triad6_bct_uword_septemvigits("B0A0")))
+
 static bct_utryte readCb(bct_uword addr) {
 	/*char buf[5];
 	triad6_bct_uword_septemvigdump(addr, buf);
@@ -21,17 +27,17 @@ static bct_utryte readCb(bct_uword addr) {
 	if (offset < machine.ramSize) {
 		return triad6_bct_memory_read(machine.RAM, offset);
 	}
-	else if (offset < triad6_bct_uword_septemvigits("6000")) {
-		return triad6_bct_memory_read(machine.video.framebuffer, offset);
+	else if (offset < TRIAD6_FRAMEBUFFER_END) {
+		return triad6_bct_memory_read(machine.video.framebuffer, offset - TRIAD6_FRAMEBUFFER_START);
 	}
-	else if (offset < triad6_bct_uword_septemvigits("B080")) {
+	else if (offset < TRIAD6_COLOR_TABLE_START) {
 		return triad6_bct_utryte_convert(0);
 	}
-	else if (offset < triad6_bct_uword_septemvigits("B090")) {
-		return triad6_bct_memory_read(machine.video.colorTable, offset);
+	else if (offset < TRIAD6_PALETTES_START) {
+		return triad6_bct_memory_read(machine.video.colorTable, offset - TRIAD6_COLOR_TABLE_START);
 	}
-	else if (offset < triad6_bct_uword_septemvigits("B0A0")) {
-		return triad6_bct_memory_read(machine.video.palettes, offset);
+	else if (offset < TRIAD6_PALETTES_END) {
+		return triad6_bct_memory_read(machine.video.palettes, offset - TRIAD6_PALETTES_START);
 	}
 	else {
 		return triad6_bct_utryte_convert(0);
@@ -51,8 +57,8 @@ static void writeCb(bct_uword addr, bct_utryte data) {
 	if (offset < machine.ramSize) {
 		triad6_bct_memory_write(machine.RAM, offset, data);
 	}
-	else if (offset < triad6_bct_uword_septemvigits("6000")) {
-		triad6_bct_memory_write(machine.video.framebuffer, offset, data);
+	else if (offset < TRIAD6_FRAMEBUFFER_END) {
+		triad6_bct_memory_write(machine.video.framebuffer, offset - TRIAD6_FRAMEBUFFER_START, data);
 	}
 }
 
