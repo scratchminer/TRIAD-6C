@@ -1,7 +1,9 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(TRIAD-6 VERSION 0.1 LANGUAGES C)
 
 find_package(SDL2 REQUIRED)
+
+set(CMAKE_BUILD_TYPE Release)
 
 add_executable(TRIAD-6 src/bct.c src/bvs1.c src/cpu.c src/machine.c src/main.c)
 target_include_directories(TRIAD-6 PUBLIC "${PROJECT_SOURCE_DIR}/include" "${SDL2_INCLUDE_DIRS}")

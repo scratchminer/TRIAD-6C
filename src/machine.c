@@ -8,9 +8,9 @@
 	0206: D1 D9	RBPOS 0202
 */
 
-void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb writeCb) {
+void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb writeCb, bvs1_pixel_cb pixelCb) {
 	triad6_cpu_init(&obj->cpu);
-	triad6_bvs1_init(&obj->video);
+	triad6_bvs1_init(&obj->video, pixelCb);
 	
 	obj->ramSize = triad6_util_kiloTrytes2Trytes(1);
 	obj->RAM = malloc(triad6_util_trytes2Bytes(obj->ramSize));
@@ -40,7 +40,7 @@ void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb wr
 
 void triad6_machine_frame(machine_state *obj) {
 	triad6_cpu_execute(&obj->cpu);
-	// triad6_bvs1_render(&obj->video);
+	triad6_bvs1_render(&obj->video);
 }
 
 void triad6_machine_quit(machine_state *obj) {

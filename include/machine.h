@@ -16,7 +16,7 @@ typedef struct {
 	size_t ramSize;
 } machine_state;
 
-void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb writeCb);
+void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb writeCb, bvs1_pixel_cb pixelCb);
 void triad6_machine_frame(machine_state *obj);
 void triad6_machine_quit(machine_state *obj);
 

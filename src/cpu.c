@@ -5,9 +5,11 @@
 #include "cpu.h"
 #include "utility.h"
 
-static jmp_buf renderEnv;
+static jmp_buf cpuEnv;
 
-#define FRAMERATE 60
+// this determines how long to run the CPU for on each frame
+// a value of 81 (to clear overhead for the BVS1) gets me pretty close to a solid 60 FPS on my computer
+#define FRAMERATE 81
 
 #define CONCAT_(one, two, three, four) one##two##three##four
 
@@ -19,7 +21,7 @@ static jmp_buf renderEnv;
 #define cpu_WAIT_CLOCK(op) do { \
 	if (obj->thisCycle == cycles) { \
 		do op while (0); \
-		longjmp(renderEnv, 1); \
+		longjmp(cpuEnv, 1); \
 	} \
 	cycles++; \
 } while (0) \
@@ -859,7 +861,7 @@ static void cpu_loop(cpu_state *obj) {
 			obj->thisCycle = 0;
 			do {} while ((triad6_util_perfCounter() - obj->lastClockTime) < obj->clockPeriod);
 		}
-		else if (!setjmp(renderEnv)) {
+		else if (!setjmp(cpuEnv)) {
 			++obj->thisCycle;
 			cpu_opcodes[triad6_bct_utryte_value(obj->ir)](obj);
 			do {} while ((triad6_util_perfCounter() - obj->lastClockTime) < obj->clockPeriod);
@@ -871,13 +873,13 @@ void triad6_cpu_execute(cpu_state *obj) {
 	obj->startClockTime = triad6_util_perfCounter();
 	
 	if (stopCPU) {
-		if (!setjmp(renderEnv)) {
+		if (!setjmp(cpuEnv)) {
 			stopCPU = false;
 			cpu_loop(obj);
 		}
 	}
 	else {
-		if (!setjmp(renderEnv)) {
+		if (!setjmp(cpuEnv)) {
 			cpu_loop(obj);
 		}
 	}
@@ -886,7 +888,7 @@ void triad6_cpu_execute(cpu_state *obj) {
 void triad6_cpu_quit(cpu_state *obj) {
 	obj->startClockTime = triad6_util_perfCounter();
 	
-	if (!setjmp(renderEnv)) {
+	if (!setjmp(cpuEnv)) {
 		stopCPU = true;
 		cpu_loop(obj);
 	}
