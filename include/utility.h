@@ -15,8 +15,6 @@
 #endif
 #elif defined(__APPLE__)
 #include <mach/mach_time.h>
-#elif defined(_WIN32)
-#include <windows.h>
 #endif
 
 #include "bct.h"
@@ -52,15 +50,6 @@ static uint64_t triad6_util_perfCounter(void) {
 	clock_gettime(CLOCKID, &spec);
 	now = spec.tv_sec * 1.0e9 + spec.tv_nsec;
 	return now;
-#elif defined(_WIN32)
-	static LARGE_INTEGER win_frequency;
-	if (0 == is_init) {
-		QueryPerformanceFrequency(&win_frequency);
-		is_init = 1;
-	}
-	LARGE_INTEGER now;
-	QueryPerformanceCounter(&now);
-	return (uint64_t) ((1e9 * now.QuadPart)  / win_frequency.QuadPart);
 #endif
 }
 

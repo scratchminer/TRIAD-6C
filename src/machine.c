@@ -2,10 +2,23 @@
 #include "utility.h"
 
 /*
+	Bandock's test:
+	
 	0200: P3 DC	SETBU #-1
 	0202: 40 03	ADD #3
 	0204: E0 02	CMP #2
 	0206: D1 D9	RBPOS 0202
+*/
+
+/*
+	Color change test (assumes the screen is cleared to color 0):
+	(WARNING: DO NOT RUN AT FULL SPEED)
+	
+	0200: P3 DC	SETBU #-1
+	0202: 20 00	LDA #0
+	0204: 30 90 B0	STA B090
+	0207: 40 01	ADD #1
+	0209: D0 D8	RJMP 0204
 */
 
 void triad6_machine_init(machine_state *obj, cpu_read_cb readCb, cpu_write_cb writeCb, bvs1_pixel_cb pixelCb) {

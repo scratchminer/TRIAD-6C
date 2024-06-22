@@ -601,9 +601,11 @@ void triad6_bct_memory_write(const uint8_t *dst, size_t offset, bct_tryte data) 
 	
 	uint16_t *addr = (uint16_t *)&dst[byteOffset];
 	if (bitOffset) {
+		*addr &= ~(((1 << (bct_TRIT_SIZE * bct_TRYTE_SIZE)) - 1) << (16 - (bct_TRIT_SIZE * bct_TRYTE_SIZE)));
 		*addr |= triad6_bct_rollTryte(data) << (16 - (bct_TRIT_SIZE * bct_TRYTE_SIZE));
 	}
 	else {
+		*addr &= ~((1 << (bct_TRIT_SIZE * bct_TRYTE_SIZE)) - 1);
 		*addr |= triad6_bct_rollTryte(data);
 	}
 }

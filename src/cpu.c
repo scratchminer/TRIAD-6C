@@ -29,11 +29,6 @@ static jmp_buf cpuEnv;
 #define cpu_INDEX_CONVERT(obj, index) ((triad6_bct_getTrit(obj->F, cpu_FLAG_BALANCED) == 1) ? triad6_bct_tryte2uword(index) : triad6_bct_utryte2uword(index))
 #define cpu_INCR_UWORD(reg) reg = triad6_bct_uword_add((reg), triad6_bct_uword_convert(1))
 
-cpu_INSTDEF(invalid) {
-	// do nothing
-	obj->fetch = true;
-}
-
 // No OPeration
 cpu_INSTDEF(NOP) {
 	cpu_SETUP_INST();
@@ -65,14 +60,13 @@ cpu_INSTDEF(wrmar) {
 	obj->writeTryte(obj->mar, obj->mdr);
 }
 
-#define cpu_ADDRESS_IMM(obj) do { \
+#define cpu_ADDRESS_IMM(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-	}); \
-} while (0)
+	})
 
-#define cpu_ADDRESS_ABS(obj) do { \
+#define cpu_ADDRESS_ABS(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
@@ -80,14 +74,13 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->mar = triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
+		(obj)->mar = triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-	}); \
-} while (0)
+	})
 
-#define cpu_ADDRESS_ABX(obj) do { \
+#define cpu_ADDRESS_ABX(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
@@ -95,14 +88,13 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->X)); \
+		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->X)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-	}); \
-} while (0)
+	})
 
-#define cpu_ADDRESS_ABY(obj) do { \
+#define cpu_ADDRESS_ABY(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
@@ -110,14 +102,13 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->Y)); \
+		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->Y)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-	}); \
-} while (0)
+	})
 
-#define cpu_ADDRESS_IND(obj) do { \
+#define cpu_ADDRESS_IND(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
@@ -125,7 +116,7 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->mar = triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
+		(obj)->mar = triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmarinc); \
@@ -133,14 +124,13 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-		(obj)->mar = triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
+		(obj)->mar = triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-	}); \
-} while (0)
+	})
 
-#define cpu_ADDRESS_IDX(obj) do { \
+#define cpu_ADDRESS_IDX(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
@@ -148,7 +138,7 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->mar = triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
+		(obj)->mar = triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmarinc); \
@@ -156,14 +146,13 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->X)); \
+		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->X)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-	}); \
-} while (0)
+	})
 
-#define cpu_ADDRESS_IDY(obj) do { \
+#define cpu_ADDRESS_IDY(obj) \
 	cpu_SETUP_INST(); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
@@ -171,7 +160,7 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->mar = triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
+		(obj)->mar = triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmarinc); \
@@ -179,12 +168,11 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->Y)); \
+		(obj)->mar = triad6_bct_uword_add(triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)), cpu_INDEX_CONVERT(obj, (obj)->Y)); \
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdmar); \
-	}); \
-} while (0)
+	})
 
 #define cpu_SIGN(n) ((n) > 0 ? 1 : ((n) < 0 ? -1 : 0))
 #define cpu_LD_INSTDEF(reg, mode) cpu_INSTDEF(CONCAT_(LD,reg,_,mode)) { \
@@ -200,10 +188,9 @@ cpu_INSTDEF(wrmar) {
 }
 
 #define cpu_ST_INSTDEF(reg, mode) cpu_INSTDEF(CONCAT_(ST,reg,_,mode)) { \
-	cpu_SETUP_INST(); \
 	CONCAT_(cpu_ADDRESS_,mode,,)(obj); \
+	obj->mdr = obj->reg; \
 	cpu_WAIT_CLOCK({ \
-		obj->mdr = obj->reg; \
 		cpu_EXEC_INST(wrmar); \
 		obj->fetch = true; \
 	}); \
@@ -345,7 +332,7 @@ cpu_INSTDEF(wrmar) {
 	}); \
 	cpu_WAIT_CLOCK({ \
 		cpu_EXEC_INST(rdpc); \
-		(obj)->tmp = triad6_bct_uword_or((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
+		(obj)->tmp = triad6_bct_uword_add((obj)->tmp, triad6_bct_uword_shift_left((obj)->mdr, bct_TRYTE_SIZE)); \
 		if (!(condExpr)) obj->fetch = true; \
 	}); \
 	cpu_WAIT_CLOCK({ \
@@ -571,10 +558,10 @@ cpu_XFER_TRYTE_INSTDEF(Y, X);
 cpu_INSTDEF(TYXSP) {
 	cpu_SETUP_INST();
 	cpu_WAIT_CLOCK({
-		obj->SP = triad6_bct_uword_or(triad6_bct_uword_and(obj->SP, triad6_bct_uword_inv(triad6_bct_utryte2uword(bct_UTRYTE_MAX))), triad6_bct_utryte2uword(obj->X));
+		obj->SP = triad6_bct_uword_add(triad6_bct_uword_and(obj->SP, triad6_bct_uword_inv(triad6_bct_uword_convert(bct_UTRYTE_MAX))), triad6_bct_utryte2uword(obj->X));
 	});
 	cpu_WAIT_CLOCK({
-		obj->SP = triad6_bct_uword_or(triad6_bct_uword_shift_left(triad6_bct_utryte2uword(obj->Y), bct_TRYTE_SIZE), triad6_bct_utryte2uword(obj->X));
+		obj->SP = triad6_bct_uword_add(triad6_bct_uword_shift_left(triad6_bct_utryte2uword(obj->Y), bct_TRYTE_SIZE), triad6_bct_utryte2uword(obj->X));
 		obj->fetch = true;
 	});
 }
@@ -679,7 +666,7 @@ static cpu_instruction_cb cpu_opcodes[bct_UTRYTE_MAX + 1];
 
 void triad6_cpu_init(cpu_state *obj) {
 	for (size_t op = 0; op < bct_UTRYTE_MAX + 1; op++) {
-		cpu_opcodes[op] = cpu_GET_INST(invalid);
+		cpu_opcodes[op] = cpu_GET_INST(NOP);
 	}
 	
 	OPCODE(00, NOP);
@@ -850,6 +837,7 @@ void triad6_cpu_init(cpu_state *obj) {
 static bool stopCPU = true;
 
 static void cpu_loop(cpu_state *obj) {
+	// note: commenting out this outer loop will make the CPU run at 60 Hz -- better for testing
 	while ((triad6_util_perfCounter() - obj->startClockTime) < (PERF_COUNTER_UNITS / FRAMERATE)) {
 		obj->lastClockTime = triad6_util_perfCounter();
 		

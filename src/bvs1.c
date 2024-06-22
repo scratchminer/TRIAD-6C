@@ -11,8 +11,6 @@ void triad6_bvs1_init(bvs1_state *obj, bvs1_pixel_cb pixelCb) {
 	obj->colorTable = malloc(triad6_util_trytes2Bytes(27));
 	obj->paletteTable = malloc(triad6_util_trytes2Bytes(27));
 	obj->setPixel = pixelCb;
-	
-	triad6_bct_memory_write(obj->paletteTable, 0, (bct_tryte)triad6_bct_utryte_septemvigits("Q0"));
 }
 
 void triad6_bvs1_render(bvs1_state *obj) {

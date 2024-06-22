@@ -113,6 +113,8 @@ void triad6_quit(void) {
 }
 
 triad6_err triad6_run(void) {
+	uint64_t lastFrame = triad6_util_perfCounter();
+	
 	bool stop = false;
 	while (!stop)
 	{
@@ -129,6 +131,9 @@ triad6_err triad6_run(void) {
 		
 		triad6_machine_frame(&machine);
 		SDL_UpdateWindowSurface(window);
+		
+		//printf("%.2f fps\n", 1000000000.0/(triad6_util_perfCounter() - lastFrame));
+		lastFrame = triad6_util_perfCounter();
 	}
 	
 	return err_OK;
